@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE StrictData #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE LambdaCase #-}
 
 module Lib
     ( solution
@@ -9,8 +8,9 @@ module Lib
 
 
 import Prelude hiding (readFile)
-import Data.ByteString.Lazy (readFile)
+import Data.ByteString.Lazy (ByteString, readFile)
 import qualified Data.ByteString.Lazy.Char8 as BSL
+import Data.Either
 import Data.Vector (Vector)
 import Data.Text (Text)
 import Data.Csv
@@ -27,19 +27,20 @@ instance FromRecord Person
 instance ToRecord Person
 
 
+-- Curious if there's a way to use a Validation-like data type that returns
+-- The successfully parsed bits and the failed bits
+-- something like :: ([Failure], [Success])
+-- Or if that would mean having to write the actual Parser itself.
 solution :: IO ()
-solution = do
-    -- usually I'd stick this reference in a config
-    csv <- readFile "./file.csv"
-    BSL.putStrLn csv
+solution =
+    ("./file.csv" & readFile)
+        -- What's preventing inference here?
+        >>= (decode HasHeader :: ByteString -> Either String (Vector Person))
+        # either show show
+        # putStrLn
 
-    let decoded:: Either String (Vector Person)
-        -- What if we want to be able to ignore un-formed rows?
-        decoded = decode HasHeader csv
+(#) :: (a -> b) -> (b -> c) -> a -> c
+(#) = flip (.)
 
-    foldMap show decoded
-        |> putStrLn
-
-
-(|>) :: a ->  (a -> b) -> b
-a |> fn = fn a
+(&) :: a ->  (a -> b) -> b
+a & fn = fn a
