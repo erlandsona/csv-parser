@@ -1,6 +1,9 @@
 module Main where
 
-import Lib
+
+import SolutionA
+import SolutionB
 
 main :: IO ()
-main = solution
+-- main = solutionA
+main = solutionB

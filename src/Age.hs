@@ -13,7 +13,7 @@ instance FromField Age where
     parseField i = do
         int <- (parseField i :: Parser Int)
 
-        if 0 < int && int < 150 then
+        if int `elem` [0..150] then
             pure (Age int)
         else
-            fail "Didn't get proper input to construct an Age"
+            fail $ "expected Age, must be in range 0-150. Got: " ++ show i

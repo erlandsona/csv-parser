@@ -1,4 +1,6 @@
-name,age,address
-Austin Erlandson,28,"712 S 14th St, Nashville TN, 37206"
-Emily Kroll,-300,""
-Bob,9999999,"123 Blah Street"
+name,age
+Austin Erlandson,28
+Emily Kroll,-300
+Bob,9999999
+Sally
+,Burt
