@@ -38,6 +38,7 @@ library
       base >=4.7 && <5
     , bytestring
     , cassava
+    , text
     , vector
   default-language: Haskell2010
 
@@ -53,6 +54,7 @@ executable mercury-exe
     , bytestring
     , cassava
     , mercury
+    , text
     , vector
   default-language: Haskell2010
 
@@ -69,5 +71,6 @@ test-suite mercury-test
     , bytestring
     , cassava
     , mercury
+    , text
     , vector
   default-language: Haskell2010

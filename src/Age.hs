@@ -11,6 +11,7 @@ instance ToField Age where
 
 instance FromField Age where
     parseField i = do
+        -- Do we need Integer or some other underlying representation?
         int <- (parseField i :: Parser Int)
 
         if int `elem` [0..150] then
