@@ -20,15 +20,17 @@ import Person
 solutionB :: IO ()
 solutionB = withFile "file.csv" ReadMode $ flip (folder []) (decode HasHeader)
 
+-- Can a Foldable instance be written for Parser here?
 folder :: [Either String Person] -> Handle -> Parser Person -> IO ()
 folder acc handle =
     \case
-        Fail input err -> do
+        Fail input err ->
             putStrLn (err ++ show input)
-        Done ls -> do
-            putStrLn . show $ ls ++ acc
-        Many ls kont -> do
-            folder (acc ++ ls) handle =<< feed kont handle
+        Done ls ->
+            putStrLn (show (ls ++ acc))
+        Many ls kont ->
+            feed kont handle >>= -- is do prefered here?
+                folder (acc ++ ls) handle
 
 feed :: (ByteString -> Parser Person) -> Handle -> IO (Parser Person)
 feed kont csv = do
